@@ -1,9 +1,10 @@
 "use client";
 
 import { Button, TextInput } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 
 interface ILoginForm {
   username: string;
@@ -12,6 +13,8 @@ interface ILoginForm {
 
 const Login = () => {
   const router = useRouter();
+  const params = useSearchParams();
+
   const {
     register,
     handleSubmit,
@@ -23,8 +26,18 @@ const Login = () => {
     console.log(data);
   };
 
+  useEffect(() => {
+    if (params.get("redirectFromRegister")) {
+      toast.success("Please check your email for validation", {
+        id: "register_success",
+      });
+      router.replace("/auth/login");
+    }
+  }, [params]);
+
   return (
     <>
+      <Toaster />
       <h1 className="text-3xl">Login</h1>
       <form
         onSubmit={handleSubmit(loginHandler)}

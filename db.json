@@ -1,5 +1,25 @@
 {
-    "users": [
-       
-    ]
+  "users": [
+    {
+      "email": "kevin.pulung@binus.ac.id",
+      "password": "$2a$10$3gMNfHIK9kHWV8UKXlToL.sW10MOh5JjoIU5Zft8UoeXPprStlZZy",
+      "username": "jeppung",
+      "isValid": false,
+      "id": 1
+    },
+    {
+      "email": "kevin.kevin@binus.ac.id",
+      "password": "$2a$10$MA1iZCr4yT9xxAHbGurwbOrYIgtVXRB/JV8IqW/fgWL06u1WYZGDy",
+      "username": "jeppung",
+      "isValid": false,
+      "id": 2
+    },
+    {
+      "email": "admin@binus.ac.id",
+      "password": "$2a$10$is9SoWYHHR34cUOcjYHNqe44UHtLBSimeKw6GHrskIUt0Bu47IzU.",
+      "username": "sukamakan_kmg",
+      "isValid": false,
+      "id": 3
+    }
+  ]
 }
