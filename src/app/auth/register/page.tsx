@@ -1,9 +1,12 @@
 "use client";
 
-import { Button, TextInput } from "@mantine/core";
+import { Button, Loader, TextInput } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
+import { BASE_URL } from "@/network";
+import toast, { Toaster } from "react-hot-toast";
 
 interface IRegisterForm {
   username: string;
@@ -14,6 +17,7 @@ interface IRegisterForm {
 
 const Register = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -22,12 +26,28 @@ const Register = () => {
     formState: { errors },
   } = useForm<IRegisterForm>();
 
-  const registerHandler: SubmitHandler<IRegisterForm> = (data) => {
-    console.log(data);
+  const registerHandler: SubmitHandler<IRegisterForm> = async (data) => {
+    setLoading(true);
+    try {
+      await axios.post(`${BASE_URL}/register`, {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        isValid: false,
+      });
+
+      router.replace("/auth/login?redirectFromRegister=true");
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        toast.error(e.response?.data);
+      }
+    }
+    setLoading(false);
   };
 
   return (
     <>
+      <Toaster />
       <h1 className="text-3xl">Register</h1>
       <form
         onSubmit={handleSubmit(registerHandler)}
@@ -68,7 +88,10 @@ const Register = () => {
         />
         <TextInput
           {...register("password", {
-            required: "Password is required",
+            validate: {
+              required: (v) => v.length !== 0 || "Password is required",
+              minCharacters: (v) => v.length >= 8 || "Password is too short",
+            },
             onChange: (e) => {
               setValue("password", e.target.value.trim());
             },
@@ -93,8 +116,12 @@ const Register = () => {
           error={errors.confirmPassword?.message}
         />
         <div className="mt-5 w-full">
-          <Button type="submit" className="bg-black w-full">
-            Submit
+          <Button
+            type="submit"
+            className="bg-black w-full"
+            disabled={loading ? true : false}
+          >
+            {loading ? <Loader color="white" size="sm" /> : "Submit"}
           </Button>
         </div>
       </form>
