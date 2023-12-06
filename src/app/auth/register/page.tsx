@@ -58,7 +58,7 @@ const Register = () => {
             required: "Username is required",
             validate: {
               alphanumericOnly: (v) =>
-                RegExp("^[a-zA-Z0-9_]+$").test(v) ||
+                RegExp("^[a-zA-Z][a-zA-Z0-9_]*$").test(v) ||
                 "Other special characters are not allowed",
             },
             onChange: (e) => {
@@ -66,7 +66,7 @@ const Register = () => {
             },
           })}
           label="Username"
-          description="Allowed special character: _ (underscore)"
+          description="Starts with alphabets, allowed special character: _ (underscore)"
           error={errors.username?.message}
         />
         <TextInput
