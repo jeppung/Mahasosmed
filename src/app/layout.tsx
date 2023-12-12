@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "./globals.css";
+import ReduxWrapper from "@/components/ReduxWrapper";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,10 +18,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript />
+        {/* Wrapped with suspense, to tackle Cypress test hydration error
+          caused by cypress itself trying to find its injected script in the head tag
+          but instead got ours
+        */}
+        <Suspense>
+          <ColorSchemeScript />
+        </Suspense>
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <MantineProvider>
+          <ReduxWrapper>{children}</ReduxWrapper>
+        </MantineProvider>
       </body>
     </html>
   );

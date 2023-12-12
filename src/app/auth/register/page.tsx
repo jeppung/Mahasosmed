@@ -35,14 +35,16 @@ const Register = () => {
         password: data.password,
         isValid: false,
       });
-
+      setLoading(false);
       router.replace("/auth/login?redirectFromRegister=true");
     } catch (e) {
+      console.log(e);
+      setLoading(false);
       if (axios.isAxiosError(e)) {
-        toast.error(e.response?.data);
+        return toast.error(e.response?.data.message ?? "An error occured");
       }
+      return toast.error("An error occured");
     }
-    setLoading(false);
   };
 
   return (
